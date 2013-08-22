@@ -8,10 +8,18 @@ class MoviesController < ApplicationController
 
   def index
    # debugger
+    @titlesorted = false
+    @release_dateSorted = false
+    
     if params[:sort].nil?
       @movies = Movie.all
     else
       @movies = Movie.order(params[:sort])
+      if params[:sort] == 'title'
+        @titleSorted = true
+      elsif params[:sort] == 'release_date'
+        @release_dateSorted = true
+      end
     end
   end
 
