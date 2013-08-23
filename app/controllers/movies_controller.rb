@@ -7,18 +7,28 @@ class MoviesController < ApplicationController
   end
 
   def index
-   # debugger
-    @titlesorted = false
-    @release_dateSorted = false
-    
-    if params[:sort].nil?
-      @movies = Movie.all
+    @titleNotSorted = true
+    @release_dateNotSorted = true
+    @all_ratings = Movie.all_ratings
+
+    if params["ratings"].nil?
+      ratings_filter = @all_ratings
     else
-      @movies = Movie.order(params[:sort])
+      ratings_filter = params["ratings"].keys
+    end
+    
+    @checked = Movie.checked ratings_filter
+    
+    #debugger
+    @movies = Movie.order(params[:sort]).find(:all,
+           :conditions => { :rating => ratings_filter })
+   
+    if not params[:sort].nil?
+      #@movies = @movies.order(params[:sort])
       if params[:sort] == 'title'
-        @titleSorted = true
+        @titleNotSorted = false
       elsif params[:sort] == 'release_date'
-        @release_dateSorted = true
+        @release_dateNotSorted = false
       end
     end
   end
