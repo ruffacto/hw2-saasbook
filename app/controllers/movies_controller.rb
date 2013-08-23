@@ -10,21 +10,21 @@ class MoviesController < ApplicationController
     @titleNotSorted = true
     @release_dateNotSorted = true
     @all_ratings = Movie.all_ratings
+    @rr = params
 
     if params["ratings"].nil?
       ratings_filter = @all_ratings
     else
       ratings_filter = params["ratings"].keys
     end
+    #debugger
     
     @checked = Movie.checked ratings_filter
     
-    #debugger
     @movies = Movie.order(params[:sort]).find(:all,
            :conditions => { :rating => ratings_filter })
    
     if not params[:sort].nil?
-      #@movies = @movies.order(params[:sort])
       if params[:sort] == 'title'
         @titleNotSorted = false
       elsif params[:sort] == 'release_date'
